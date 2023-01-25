@@ -9,7 +9,7 @@ export const getCountries = () => {
     return async function (dispatch) {
         try {
             let countries = await axios(`http://${HOST}:${PORT}/countries`)
-            console.log(breeds.data);
+            console.log(countries.data);
             return dispatch({ type: GET_COUNTRIES, payload: countries.data })
         } catch (error) {
             return dispatch({ type: ERROR, payload: error })

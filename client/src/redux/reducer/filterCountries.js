@@ -1,44 +1,40 @@
 export const filter = (filter, countries) => {
-    const { touristActivity, country, population, area } = filter;
+    const { continent, country, population, area } = filter;
 
-    let newCountrie = countries;
+    let newCountries = countries;
 
-
-    if (countries) {
-        newCountrie = newBreeds.filter(breed => breeds === "Real Breeds" ? !breed.db : breed.db)
-        console.log('filter', newBreeds)
+    if (continent) {
+        newCountries = newCountries.filter(country => country.continent === continent);
     }
 
-    if (temperament) {
-        newBreeds = newBreeds.filter(breed => breed.temperament?.includes(temperament))
-        console.log('filter2', newBreeds)
+    if (country) {
+        newCountries = newCountries.filter(country => country.name === country);
     }
 
-    if (weigth) {
-        if (weigth === 'Weigth ASC') {
-            newBreeds.sort((breedA, breedB) => {
-                return breedA.weight.split(' ')[0] - breedB.weight.split(' ')[0]
-            })
+    if (population) {
+        if (population === 'Population ASC') {
+            newCountries.sort((countryA, countryB) => {
+                return countryA.population - countryB.population;
+            });
         } else {
-            newBreeds.sort((breedA, breedB) => {
-                return breedB.weight.split(' ')[0] - breedA.weight.split(' ')[0]
-            })
+            newCountries.sort((countryA, countryB) => {
+                return countryB.population - countryA.population;
+            });
         }
     }
 
-    if (alpha) {
+    if (area) {
         console.log('ordern ALPHA')
-        if (alpha === 'ASC') {
-            newBreeds.sort((breedA, breedB) => {
-                return breedB.name.charCodeAt(0) - breedA.name.charCodeAt(0)
-            })
+        if (area === 'ASC') {
+            newCountries.sort((countryA, countryB) => {
+                return countryB.name.charCodeAt(0) - countryA.name.charCodeAt(0);
+            });
         } else {
-            newBreeds.sort((breedA, breedB) => {
-                return breedA.name.charCodeAt(0) - breedB.name.charCodeAt(0)
-            })
+            newCountries.sort((countryA, countryB) => {
+                return countryA.name.charCodeAt(0) - countryB.name.charCodeAt(0);
+            });
         }
     }
 
-
-    return newBreeds.length ? newBreeds : { error: 'Breed Not Found' }
+    return newCountries.length ? newCountries : { error: 'Country Not Found' }
 }

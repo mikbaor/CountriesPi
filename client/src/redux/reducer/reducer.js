@@ -4,8 +4,8 @@ import { filter } from "./filterCountries";
 const initialState = {
     allCountries: [],
     touristActivity: [],
-    filterCountries: [],
-    detailsCountries: null,
+    filterCountries: [],    
+    detailCountry: null,
     errors: ''
 };
 
@@ -31,7 +31,7 @@ const rootReducer = (state = initialState, action) => {
             }
 
         case FILTER_COUNTRIES:
-            const result = filter(action.payload, [...state.allBreeds]);
+            const result = filter(action.payload, [...state.allCountries]);
             if (result.length)
                 return {
                     ...state,
@@ -39,17 +39,17 @@ const rootReducer = (state = initialState, action) => {
                     errors: ''
                 }
 
-            return {
+                return {
                 ...state,
                 filterCountries: [],
                 errors: result.error
-            }
+                }
 
 
         case DETAILS_COUNTRIES:
             return {
                 ...state,
-                detailsCountries: action.payload
+                detailCountry: action.payload
             }
 
         case CREATE_COUNTRIES:

@@ -9,7 +9,6 @@ export const getCountries = () => {
     return async function (dispatch) {
         try {
             let countries = await axios(`http://${HOST}:${PORT}/countries`)
-            console.log(countries.data);
             return dispatch({ type: GET_COUNTRIES, payload: countries.data })
         } catch (error) {
             return dispatch({ type: ERROR, payload: error })
@@ -17,32 +16,26 @@ export const getCountries = () => {
     }
 }
 
+
 export const getCountriesByName = (name) => {
     return async function (dispatch) {
         try {
             let countries = await axios(`http://${HOST}:${PORT}/countries?name=${name}`)
-            if (!countries.data?.msg) return dispatch({ type: GET_COUNTRIES_BY_NAME, payload: countries.data })
-            return dispatch({ type: ERROR, payload: countries.data.msg })
-        } catch (error) {
-            return dispatch({ type: ERROR, payload: error.message })
+                return dispatch({ type: GET_COUNTRIES_BY_NAME, payload: countries.data })
+            } catch (error) {
+                return dispatch({ type: ERROR, payload: error.message })
         }
     }
 }
 
-export const getTouristActivity = () => {
+export const getTouristActivity = (id) => {
     return async function (dispatch) {
         try {
-            let touristActivity = await axios(`http://${HOST}:${PORT}/tourist`)
-            return dispatch({ type: GET_TOURISTACTIVITY, payload: touristActivity.data.data })
+            let touristActivity = await axios(`http://${HOST}:${PORT}/countries/${id}`)
+            return dispatch({ type: GET_TOURISTACTIVITY, payload: touristActivity.data.tourist_activities })
         } catch (error) {
             return dispatch({ type: ERROR, payload: error })
         }
-    }
-}
-
-export const filterCountries = (filter) => {
-    return function (dispatch) {
-        return dispatch({ type: GET_COUNTRIES, payload: filter })
     }
 }
 
@@ -50,11 +43,10 @@ export const detailsCountries = (id) => {
     return async function (dispatch) {
         try {
             let countries = await axios(`http://localhost:3001/countries/${id}`);
-
-            return dispatch({ type: DETAILS_COUNTRIES, payload: countries.data })
+                 return dispatch({ type: DETAILS_COUNTRIES, payload: countries.data })
         } catch (error) {
-            return dispatch({ type: ERROR, payload: error })
-        }
+                  return dispatch({ type: ERROR, payload: error })
+        }   
     }
 }
 
@@ -69,8 +61,16 @@ export const createCountry = (data) => {
         }
     }
 }
+
 export const clearDetailCountries = () => {
     return function (dispatch) {
         return dispatch({ type: CLEAR_DETAIL_COUNTRIES, payload: {} })
+    }
+}
+
+
+export const filterCountries = (filter) => {
+    return function (dispatch) {
+        return dispatch({ type: FILTER_COUNTRIES, payload: filter })
     }
 }

@@ -1,0 +1,97 @@
+.cardcontainer {
+  position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    background-color: rgba(75, 121, 247, 0.51);
+    backdrop-filter: blur(3px);
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+  
+    border: 1px solid #f7786b;
+    padding: 20px;
+    width: 80vw;
+    height: 100vh;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    font-family: "Open Sans", sans-serif;
+  
+    border: 5px ridge rgba(50, 50, 220, 0.6);
+  }
+  
+  .cardtitle {
+    color: #000000;
+    font-size: 24px;
+    font-weight: bold;
+    margin: none;
+    text-align: center;
+  
+    color: #ffffff;
+  
+    font-family: "Bakbak One", cursive;
+    display: flex;
+    align-items: center;
+  }
+  
+  .cardimage {
+    width: 50vw;
+    height: 60vh;
+    object-fit: contain;
+    border-radius: 10px 10px 0 0;
+  }
+  
+  .cardinfo {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    color: #000000;
+    font-size: 18px;
+    margin-top: 20px;
+    height: 70%;
+  
+    padding: 20px; 
+  }
+  
+  .cardinfo p {
+    margin: 10px 0;
+  }
+  
+  .cardinfo > div > h2 {
+    display: flex;
+    justify-content: flex-start;
+  
+    margin-bottom: 1em;
+  }
+  
+  .cardSubInfo {
+    display: flex;
+    justify-content: flex-start;
+  
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    margin: 10px 0;
+  }
+  
+  .cardSubInfo > p > strong {
+    color: #003b00;
+  
+    font-family: "Bakbak One", cursive;
+    font-weight: lighter;
+  }
+  
+  .cardSubInfo > p {
+    font-family: Helvetica, Helvetica, sans-serif;
+  }
+  
+  .goHome {
+    position: absolute;
+    top: 20px;
+    left: 50px;
+  
+    font-size: 30px;
+    height: auto;
+  
+    border-radius: 3px;
+  }

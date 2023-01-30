@@ -2,8 +2,8 @@
     background: rgb(31, 107, 215);
     background: linear-gradient(
       180deg,
-      rgba(31, 107, 215, 1) 0%,
-      rgba(74, 181, 165, 1) 100%
+      rgb(228, 120, 19) 0%,
+      rgb(60, 116, 107) 100%
     );
   
     box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;

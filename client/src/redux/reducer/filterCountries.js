@@ -1,5 +1,5 @@
 export const filter = (filter, countries) => {
-    const { continent, country, population, area } = filter;
+    const { continent, population, tourist_activities, alpha} = filter;
 
     let newCountries = countries;
 
@@ -7,12 +7,12 @@ export const filter = (filter, countries) => {
         newCountries = newCountries.filter(country => country.continent === continent);
     }
 
-    if (country) {
-        newCountries = newCountries.filter(country => country.name === country);
+    if (tourist_activities) {
+        newCountries = newCountries.filter(country => country.tourist_activities === tourist_activities);
     }
 
     if (population) {
-        if (population === 'Population ASC') {
+        if (population === 'ASC') {
             newCountries.sort((countryA, countryB) => {
                 return countryA.population - countryB.population;
             });
@@ -23,9 +23,8 @@ export const filter = (filter, countries) => {
         }
     }
 
-    if (area) {
-        console.log('ordern ALPHA')
-        if (area === 'ASC') {
+    if (alpha) {
+          if (alpha === 'DES') {
             newCountries.sort((countryA, countryB) => {
                 return countryB.name.charCodeAt(0) - countryA.name.charCodeAt(0);
             });

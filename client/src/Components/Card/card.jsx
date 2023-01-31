@@ -11,8 +11,7 @@ export default function Card() {
 
   const { id, name, flag, continent, capital, subregion, tourist_activities,area, population } = country;
 
-  console.log(tourist_activities)
-  
+   
 
   const handlerGoHome = (e) => {
     navigate("/home");

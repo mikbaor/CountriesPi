@@ -11,7 +11,7 @@ import Load from "../loading/load";
 import Navbar from "../navBar/navbar";
 import Country404 from "../404/404";
 
-const PAGINATE = 8;
+const PAGINATE = 10;
 
 export default function Home (){
     const dispatch = useDispatch();
@@ -56,7 +56,7 @@ const previous = () => {
  // despues pushea el html de cada boton en el array pagButtons
     for (let i = 1; i <= maxPages; i++) {
         pagButtons.push(
-          <button
+          <button 
             key={i}
             className={
               currentPage + "" === i + ""
@@ -109,10 +109,10 @@ const previous = () => {
          <Navbar Navigate = {Navigate} setCurrentPage={setCurrentPage}/>
            {
                 <div className={style.pagination}>
-                      <button onClick={previous}>Anterior</button>
+                      <button onClick={previous} className={style.buttonNav}>Anterior</button>
                     {pagButtons.map((pagbutton) => pagbutton)}
 
-                     <button onClick={nextPage}>Siguiente</button>
+                     <button onClick={nextPage} className={style.buttonNav}>Siguiente</button>
                 </div>       
            } 
             <div className={style.countryContainer}>

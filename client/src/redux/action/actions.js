@@ -69,8 +69,8 @@ export const clearDetailCountries = () => {
 }
 
 
-export const filterCountries = (filter) => {
+export const filterCountries = (filter) => { // recibe el array de filtros continent, population, tourist etc
     return function (dispatch) {
-        return dispatch({ type: FILTER_COUNTRIES, payload: filter })
+        return dispatch({ type: FILTER_COUNTRIES, payload: filter }) //se asigna el array al payload
     }
 }

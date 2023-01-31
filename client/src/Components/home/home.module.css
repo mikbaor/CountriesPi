@@ -84,15 +84,12 @@
   }
   
   .currentPage {
-    background-color: #ffffff;
-    color: #000000c7;
+    background-color: white;
+    color: black;
+    border-radius: 20px;
+    font-family: 'Arial', sans-serif;
     font-weight: bold;
-    width: 30px;
-    height: 30px;
-    padding: 2px;
-    backdrop-filter: blur(10px);
-    border-radius: 4px;
-    margin: 0px 5px;
+    transition: all 0.2s ease-in-out;
   }
   
   .otherPage {
@@ -102,6 +99,20 @@
     backdrop-filter: blur(10px);
     border-radius: 4px;
     margin: 0px 5px;
-    color: #ffffff;
-    background-color: #000000c7;
+    background-color: black;
+    color: white;
   }
+
+  .buttonNav{
+    background-color: black;
+    color: white;
+    border-radius: 20px;
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .buttonNav:hover {
+    background-color: white;
+    color: black;
+  }   

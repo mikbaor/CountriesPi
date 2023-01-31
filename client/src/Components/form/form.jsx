@@ -1,184 +1,218 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { createCountry } from "../../redux/action/actions";
-import style from "./form.module.css";
-import { validator } from "./valid";
-
-export default function CreateTouristActivity() {
-    const navigate = useNavigate();
-    const dispatch = useDispatch();  
-    const [animationTriger, setAnimationTriger] = useState(false);
-    const [errors, setErrors] = useState({});
-    const canSubmit = Object.entries(errors).length === 0;
-    const touristActivity = useSelector((state) => state.touristActivity);
-    
-
-    const [formData, setFormData] = useState({
-      name: "",
-      difficulty: "",
-      duration: "",
-      season: "",      
-      countries: []
-     
-    });
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import axios from "axios"
+import {  useSelector } from 'react-redux';
 
 
-  // Manejador de eventos para actualizar el estado cuando el usuario ingresa información
-  const handleChange = (event) => {
-    const { name, value } = event.target;
+import style from './form.module.css'
+import { validate, valideSubmit } from './validator/validato';
+import { MultipleSelectionBox } from './selection/selection';
 
-    setFormData({ ...formData, [name]: value });
-    setErrors(validator({ ...formData, [name]: value }));
-  };
+export const Form = () => {
 
-  const handleTemp = (e) => {
-    const { name, value } = e.target;
+  const countries =  useSelector(state=>state.allCountries  )
+  let countriesNames = countries.map(country=> {return {label: country.name , value: country.id}})
 
-    setFormData({
-      ...formData,
-      [name]: [...new Set([...formData.difficulty, value])],
-    });
-    setErrors(
-      validator({
-        ...formData,
-        [name]: [...new Set([...formData.difficulty, value])],
-      })
-    );
-  };
+  const [form, setForm] = useState({
+    name:"",
+    difficulty:"",
+    season:"",
+    duration:"",
+    countryIds: []
+  })
 
-  // Manejador de eventos para enviar la información del formulario al servidor
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // add valitatons
 
-    // Enviar la información al servidor
-    const { name, difficulty, season,duration,countries } = formData;
+  const [errors, setErrors] = useState({
+    name:"",
+    difficulty:"",
+    season:"",
+    duration:"",
+    countryIds:"",
+    formCompleted:""
+  })
 
-    const mapData = {
-      name,
-      difficulty,
-      season,
-      duration,
-      countries, 
-      
-    };
+  const [formCompleted, setFormCompleted] = useState(false)
+  
 
-    dispatch(createCountry(mapData));
-    setAnimationTriger(true);
-  };
+  const changeHandler = (event) => {
+    const property = event.target.name 
+    const value = event.target.value
 
-  const handlerGoHome = (e) => {
-    navigate("/home");
-  };
+    setErrors(validate({
+      ...form, 
+      [property ]: value}))
+
+
+    setForm({
+      ...form, 
+      [property ]: value})
+  }
+
  
+
+  const selectHandler = (event) => {
+    setForm({...form, countryIds: [...form.countryIds, event.target.value ]} )
+  }
+
+
+
+
+  const submitHandler= (event) => {
+    event.preventDefault()
+    
+    valideSubmit(form)
+    
+    axios.post("http://localhost:3001/activities",form)
+      .then(res=>alert(res.data))
+      .catch(err=>alert(err))
+  }
+
+ 
+  const  onDeletee = (country) => {
+    setForm({...form, countryIds: form.countryIds.filter(c=> c !== country) } )
+  }
+ 
+
+  const validateForm = () => {
+    (form.name && form.countryIds.length >=1 && form.duration && form.season) ? setFormCompleted(true) :
+    setErrors({...errors, formCompleted: 'Oh Oh! It seems that we are missing information, please complete before submit' })
+  
+  }
+
+  
+ 
+
+
   return (
     <div className={style.container}>
-      <form onSubmit={handleSubmit} className={style.form}>
-        <h1>Create Tourist Activity</h1>
-        <button className={style.gohome} onClick={handlerGoHome} type="submit">
-          HOME
-        </button>
-        <div className={style.cardinfo}>
-          {[formData].map((activity, i) => {
-            return (
-              <>
-                <h1 key={2} className={style.preview}>
-                  Preview
-                </h1>
-                <div
-                  key={i}
-                  className={`${style.dogBox} ${
-                    animationTriger ? style.animation : null
-                  }`}
-                >
-                  <h3>{activity.name}</h3>
-                  <h5>Difficulty</h5>
-                  <p>{activity.difficulty}</p>
-                  <h5>Season</h5>
-                  <p>{activity.season}</p>
-                  <h5>Duration</h5>
-                  <p className={style.countries}>
-                    {formData.countries?.join(", ")}
-                  </p>
-                </div>
-              </>
-            );
-          })}
 
-          <div className={style.col}>
-            <input
-              style={errors.name && { border: "2px solid red" }}
-              type="text"
-              name="name"
-              placeholder="NAME"
-              value={formData.name}
-              onChange={handleChange}
-            />
+      <div className={style.formContainer}>
+      <h1>Create an Activity</h1>
+
+        <form onSubmit={submitHandler} className={style.form}>
+         
+          <div className={style.inputName}>
+              <label htmlFor='name' >Name: </label>
+              <input type="text" value={form.name} onChange={changeHandler} name="name" placeholder='Activity name...'/>
+              {errors.name && <p className={style.errorText}>{errors.name}</p>}
           </div>
-          {errors.name && <span className={style.error}>{errors.name}</span>}
-          <p className={style.col}>
-            <input
-              style={errors.difficulty && { border: "2px solid red" }}
-              type="text"
-              name="difficulty"
-              placeholder="difficulty"
-              value={formData.difficulty}
-              onChange={handleChange}
-            />
-            <input
-              style={errors.duration && { border: "2px solid red" }}
-              type="text"
-              name="duration"
-              placeholder="duration"
-              value={formData.duration}
-              onChange={handleChange}
-            />
-          </p>
-          {errors.duration && (
-            <span className={style.error}>{errors.difficulty}</span>
-          )}
-          <p className={style.col}>
-            <input
-              type="text"
-              style={errors.season && { border: "2px solid red" }}
-              name="season"
-              placeholder="Season"
-              value={formData.season}
-              onChange={handleChange}
-            />
-          </p>
-          {errors.season && (
-            <span className={style.error}>{errors.season}</span>
-          )}
-          <div className={style.col}>
-            <label>Countries: </label>
-            <select name="Countries" onChange={handleTemp}>
-             <option value="Mexico"></option>
-            </select>
+
+
+          <div className={style.inputCountry}>
+              <label htmlFor='countryid'>Countries: </label>
+              
+              <select name="countryid" onChange={selectHandler}>
+                  <option >Select</option>
+                    { 
+                      countriesNames.map(country=>{
+                      return <option key={country.value} value={country.value}>{country.label}</option>
+                      })
+                    }
+              </select>
+
+
           </div>
+          {!form.countryIds.length && <p className={style.errorSelectText}>Select at least one country</p>}
+          
+         
+         <div className={style.selectedContainer}>
+          {
+            form.countryIds.map(country=>{
+              return <MultipleSelectionBox 
+                  key = {country}
+                  country ={country}
+                  onDeletee = {onDeletee}
+                />
+            })
+          }
+          </div>
+
+          <div className={style.inputDuration}>
+            <label>Duration: </label>
+            <input type="number" value={form.duration} onChange={changeHandler} name="duration"/>
+            <span>hours</span>
+          </div>
+          {!form.duration && <p className={style.errorSelectText}>Please, tell us how long will it take</p>}
+
+
+          
+          <div className={style.inputLevel}>
+            <label htmlFor='difficulty'>Level: </label>
+
+            <input type="radio" id='1' name='difficulty' value='1' onChange={changeHandler} />
+            <label htmlFor='1'>1</label>
+
+            <input type="radio" id='2' name='difficulty' value='2' onChange={changeHandler}/>
+            <label htmlFor='2'>2</label>
+
+            <input type="radio" id='3' name='difficulty' value='3' onChange={changeHandler}/>
+            <label htmlFor='3'>3</label>
+
+            <input type="radio" id='4' name='difficulty' value='4' onChange={changeHandler}/>
+            <label htmlFor='4'>4</label>
+
+            <input type="radio" id='5' name='difficulty' value='5' onChange={changeHandler}/>
+            <label htmlFor='5'>5</label>
+          </div>
+          {!form.difficulty && <p className={style.errorSelectText}>Select a level of dificulty </p>}
+            
+
+
+          <div className={style.inputSeason}>
+            <div>
+            <label>Season: </label>
+              <input type="radio" id='spring' name='season' value='spring' onChange={changeHandler} />
+              <label htmlFor='spring'> Spring</label>
+
+              <input type="radio" id='summer' name='season' value='summer' onChange={changeHandler}/>
+              <label htmlFor='summer'> Summer</label>
+            </div>
+
+            <div className={style.secondLineSeason}>
+              <input type="radio" id='fall' name='season' value='fall' onChange={changeHandler}/>
+              <label htmlFor='fall'> Fall</label>
+
+              <input type="radio" id='winter' name='season' value='winter' onChange={changeHandler}/>
+              <label htmlFor='winter'> Winter</label>
+            </div>
+          </div>
+            {!form.season && <p className={style.errorSelectText}>Select a season</p>}
+
+
+          <p className={style.confirmButton} onClick={validateForm}>Confirm if all its Ok</p>
+          {errors.formCompleted && <p className={style.errorText}>{errors.formCompleted}</p>}
+
+          <button type='submit' className={style.submitButton} disabled={formCompleted ? false:true}>Submit Activity</button>
+        
+        
+        </form>
+          <Link to="/home">
+            <button className={style.returnButton}>Return to Home</button>
+          </Link>
+
         </div>
-        {errors.countries && (
-          <span className={style.error}>{errors.countries}</span>
-        )}
-        <button
-          className={style.buttonSubmit}
-          style={{ marginTop: 20 }}
-          disabled={!canSubmit}
-          type="submit"
-        >
-          Submit
-        </button>
-      </form>
+
+        <div className={style.confirmForm}>
+              <h3>Please, check the information before you submit</h3>
+              <p>Activity: <span>{form.name}</span></p>
+              <p>Countries: <span>{form.countryIds.join(", ")}</span></p>
+              <p>Duration: <span>{form.duration} hours</span></p>
+              <p>Level of dificulty: <span>{form.difficulty}</span></p>
+              <p>Season:
+                <span>
+                  {form.season === 'fall' && 'Fall'}
+                  {form.season === 'spring' && 'Spring'}
+                  {form.season === 'winter' && 'Winter'}
+                  {form.season === 'summer' && 'Summer'}
+                </span></p>
+        </div>
+                      
+      
+           
+      
+     
+
     </div>
-  );
+  )
 }
 
-
-
-
-// {countries.map((country, index) => (
-//     <option key={index} value={country.name}>
-//       {country.name}
-//     </option>
-//   ))}

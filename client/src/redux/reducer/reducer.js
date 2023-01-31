@@ -31,7 +31,7 @@ const rootReducer = (state = initialState, action) => {
             }
 
         case FILTER_COUNTRIES:
-            const result = filter(action.payload, [...state.allCountries]);
+            const result = filter(action.payload, [...state.allCountries]); // aqui recibe el array de filtros y como segundo recibe el array a ordenar segun los filtros
             if (result.length)
                 return {
                     ...state,
